@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -18,6 +19,7 @@ public class MessageSender {
 
     public void send(String message) {
         log.info("Send Message: " + message);
-        jmsTemplate.convertAndSend(queue, message);
+        MessageCreator messageCreator = session -> session.createTextMessage(message);
+        jmsTemplate.send(queue, messageCreator);
     }
 }
